@@ -1,0 +1,67 @@
+html, body {
+  height: 100%;
+  margin: 0px;
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.title {
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 48px;
+}
+
+.wordleRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.wrongLetter, .wrongPlace, .correctPlace {
+  color: white;
+  border: none !important;
+  width: 75px !important;
+  height: 75px !important;
+}
+
+.wrongLetter {
+  background-color: #787C7E;
+}
+
+.wrongPlace {
+  background-color: #C9B458;
+}
+
+.correctPlace {
+  background-color: #6AAA64;
+}
+
+.wordleBox {
+  width: 71px;
+  height: 71px;
+  margin: 5px;
+  border: 2px solid rgb(179, 179, 179);
+  
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 38px;
+}
+
+#statusText {
+  margin: 20px;
+
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  color:rgb(112, 112, 112);
+}
