@@ -1,6 +1,6 @@
 html, body {
   height: 100%;
-  margin: 0px;
+  margin: 0;
   text-align: center;
 }
 
@@ -25,11 +25,26 @@ html, body {
   flex-wrap: wrap;
 }
 
+.wordleBox {
+  width: 61px;
+  height: 61px;
+  margin: 5px;
+  border: 2px solid rgb(179, 179, 179);
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 34px;
+}
+
 .wrongLetter, .wrongPlace, .correctPlace {
   color: white;
   border: none !important;
-  width: 75px !important;
-  height: 75px !important;
+  width: 65px !important;
+  height: 65px !important;
 }
 
 .wrongLetter {
@@ -44,24 +59,43 @@ html, body {
   background-color: #6AAA64;
 }
 
-.wordleBox {
-  width: 71px;
-  height: 71px;
-  margin: 5px;
-  border: 2px solid rgb(179, 179, 179);
-  
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+.letterPresent {
+  border-color: #787C7E;
+}
 
-  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  font-weight: bold;
-  font-size: 38px;
+.invalidWord {
+  border-color: red !important;
+}
+
+.borderTransition {
+  transition: border-color 5s;
+}
+
+.shakeWord {
+  animation: shaking 0.5s 2;
+}
+
+@keyframes shaking {
+  0% {
+    transform: translateX(0)
+  }
+  25% {
+    transform: translateX(5px)
+  }
+  50% {
+    transform: translateX(-5px)
+  }
+  75% {
+    transform: translateX(5px)
+  }
+  100% {
+    transform: translateX(0)
+  }
 }
 
 #statusText {
   margin: 20px;
 
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  color:rgb(112, 112, 112);
+  color: rgb(112, 112, 112);
 }
