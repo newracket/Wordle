@@ -6,6 +6,8 @@ let validWords;
 let currentRow = 1;
 let gameWon = null;
 
+let shaking = false;
+
 setup()
   .then(() => console.log("Setup complete"))
   .catch((e) => console.error(e));
@@ -168,10 +170,14 @@ function checkWord(row) {
     row.classList.add("shakeWord");
 
     // Stops shaking and removes red border after 1 second
-    setTimeout(() => {
-      row.classList.remove("shakeWord");
-      [...row.children].forEach((e) => e.classList.remove("invalidWord"));
-    }, 1000);
+    if (!shaking) {
+      shaking = true;
+      setTimeout(() => {
+        row.classList.remove("shakeWord");
+        [...row.children].forEach((e) => e.classList.remove("invalidWord"));
+        shaking = false;
+      }, 1000);
+    }
 
     return;
   }
