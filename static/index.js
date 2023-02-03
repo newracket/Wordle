@@ -22,9 +22,13 @@ async function setup() {
   let savedGrid;
 
   if (savedData) {
-    currentRow = savedData.currentRow;
-    savedGrid = savedData.grid;
-    gameWon = savedData.gameWon;
+    if (savedData.winningWord !== winningWord) {
+      localStorage.removeItem("savedData");
+    } else {
+      currentRow = savedData.currentRow;
+      savedGrid = savedData.grid;
+      gameWon = savedData.gameWon;
+    }
   }
 
   const grid = document.getElementById("wordleGrid");
@@ -171,7 +175,7 @@ function updateLocalStorage() {
     [...row.children].map((e) => e.innerText)
   );
 
-  const savedData = { currentRow, gameWon, grid };
+  const savedData = { currentRow, gameWon, winningWord, grid };
   localStorage.setItem("savedData", JSON.stringify(savedData));
 }
 
