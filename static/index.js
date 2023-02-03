@@ -36,8 +36,19 @@ async function setup() {
   row.classList.add("wordleRow");
   row.id = "wordleRow1";
 
+  let wordLetters = winningWord.split("");
   for (let i = 0; i <= 30; i++) {
     if (i % 5 === 0 && i !== 0) {
+      [...row.children].forEach((box) => {
+        updateLetterFromLocalStorage(
+          savedGrid,
+          box,
+          wordLetters,
+          checkWrongPlace
+        );
+      });
+      wordLetters = winningWord.split("");
+
       grid.appendChild(row);
       row = document.createElement("div");
       row.classList.add("wordleRow");
@@ -47,17 +58,24 @@ async function setup() {
     const box = document.createElement("div");
     box.classList.add("wordleBox");
     box.id = `wordleBox${i + 1}`;
-    updateLetterFromLocalStorage(savedGrid, box);
+    updateLetterFromLocalStorage(
+      savedGrid,
+      box,
+      wordLetters,
+      checkCorrectPlace
+    );
 
     row.appendChild(box);
   }
 
-  document.body.addEventListener("keydown", letterEvent);
+  document.body.addEventListener("keydown", (event) => {
+    letterEvent(event.key);
+  });
   updateGameStatus();
 }
 
 async function doFetches() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let firstDone = false;
     fetch(validWordsUrl).then((r) => {
       r.json().then((data) => {
@@ -79,15 +97,43 @@ async function doFetches() {
   });
 }
 
+function checkCorrectPlace(letter, col, box, wordLetters) {
+  const keyboardLetter = document.getElementById(letter);
+
+  if (winningWord[col] === letter) {
+    box.classList.add("correctPlace");
+    keyboardLetter.classList.add("correctPlace");
+    wordLetters[col] = "";
+  }
+}
+
+function checkWrongPlace(letter, col, box, wordLetters) {
+  const keyboardLetter = document.getElementById(letter);
+  let classWord = "wrongLetter";
+
+  if (wordLetters.includes(letter)) {
+    classWord = "wrongPlace";
+    wordLetters[wordLetters.indexOf(letter)] = "";
+  }
+
+  box.classList.add(classWord);
+  keyboardLetter.classList.add(classWord);
+}
+
 /**
  * Updates each letter in the wordle grid from local storage
  * @param savedGrid {string[][]} The saved grid
  * @param box {HTMLDivElement} The current box
  */
-function updateLetterFromLocalStorage(savedGrid, box) {
+function updateLetterFromLocalStorage(
+  savedGrid,
+  box,
+  wordLetters,
+  colorsFunction
+) {
   if (!savedGrid) return;
 
-  const i = parseInt(box.id.replace(/[^\d]*/, "")) - 1;
+  const i = parseInt(box.id.replace(/\D*/, "")) - 1;
   const row = Math.floor(i / 5);
   if (row > 4) return;
 
@@ -104,23 +150,21 @@ function updateLetterFromLocalStorage(savedGrid, box) {
     return;
   }
 
-  if (winningWord[col] === letter) {
-    box.classList.add("correctPlace");
-  } else if (winningWord.includes(letter)) {
-    box.classList.add("wrongPlace");
-  } else if (letter.length > 0) {
-    box.classList.add("wrongLetter");
-  }
+  colorsFunction(letter, col, box, wordLetters);
+}
+
+function handleClick(event) {
+  letterEvent(event.innerText !== "Delete" ? event.innerText : "Backspace");
 }
 
 /**
  * Handles the keydown event
- * @param event {KeyboardEvent} The keydown event
+ * @param key {string} The key that was pressed
  */
-function letterEvent(event) {
+function letterEvent(key) {
   if (gameWon !== null) return;
 
-  const letter = event.key;
+  const letter = key;
   const row = document.getElementById(`wordleRow${currentRow}`);
 
   if (letter.length === 1 && alphaRegex.test(letter)) {
@@ -205,16 +249,12 @@ function checkWord(row) {
   }
 
   // Matches each letter with the correct word
+  const wordLetters = winningWord.split("");
   [...row.children].forEach((e, i) => {
-    const currentLetter = e.innerText;
-
-    if (winningWord[i] === currentLetter) {
-      e.classList.add("correctPlace");
-    } else if (winningWord.includes(currentLetter)) {
-      e.classList.add("wrongPlace");
-    } else {
-      e.classList.add("wrongLetter");
-    }
+    checkCorrectPlace(e.innerText, i, e, wordLetters);
+  });
+  [...row.children].forEach((e, i) => {
+    checkWrongPlace(e.innerText, i, e, wordLetters);
   });
 
   currentRow++;

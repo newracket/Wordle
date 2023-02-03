@@ -13,15 +13,42 @@
 <h2 id="statusText"></h2>
 
 <div class="container">
-  <div id="wordleGrid">
-    <!-- Will populate using javascript -->
+  <div class="wordleContainer">
+    <div id="wordleGrid">
+      <!-- Will populate using javascript -->
+    </div>
   </div>
 
-  <script type="text/javascript">
-    const validWordsUrl = "{{ url_for("static", filename="words.json") }}";
-    const winningWordUrl = "{{ url_for("word") }}";
-  </script>
-  <script src="{{ url_for("static", filename="index.js") }}"></script>
+  <div class="keyboard">
+    <div class="keyboardRow">
+      {% for key in ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"] %}
+        <button class="keyboardKey"
+                onclick="handleClick(this)"
+                id="{{ key }}">{{ key }}</button>
+      {% endfor %}
+    </div>
+    <div class="keyboardRow">
+      {% for key in ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Delete"] %}
+        <button class="keyboardKey"
+                onclick="handleClick(this)"
+                id="{{ key }}">{{ key }}</button>
+      {% endfor %}
+    </div>
+    <div class="keyboardRow">
+      {% for key in ["Z", "X", "C", "V", "B", "N", "M", "Enter"] %}
+        <button class="keyboardKey"
+                onclick="handleClick(this)"
+                id="{{ key }}">{{ key }}</button>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  const validWordsUrl = "{{ url_for("static", filename="words.json") }}";
+  const winningWordUrl = "{{ url_for("word") }}";
+</script>
+<script src="{{ url_for("static", filename="index.js") }}"></script>
 </div>
 </body>
 
