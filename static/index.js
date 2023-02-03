@@ -1,6 +1,5 @@
 const alphaRegex = new RegExp("[a-zA-Z]");
-const wordLength = 5;
-const winningWord = "POINT";
+let winningWord = "";
 
 let validWords;
 let currentRow = 1;
@@ -16,7 +15,9 @@ setup()
  * Sets up the wordle grid and loads saved data if available
  * @returns {Promise<void>}
  */
-function setup() {
+async function setup() {
+  await doFetches();
+
   const savedData = JSON.parse(localStorage.getItem("savedData"));
   let savedGrid;
 
@@ -49,10 +50,27 @@ function setup() {
 
   document.body.addEventListener("keydown", letterEvent);
   updateGameStatus();
+}
 
-  fetch("./words.json").then((r) => {
-    r.json().then((data) => {
-      validWords = data;
+async function doFetches() {
+  return new Promise((resolve, reject) => {
+    let firstDone = false;
+    fetch(validWordsUrl).then((r) => {
+      r.json().then((data) => {
+        validWords = data;
+
+        if (firstDone) resolve();
+        else firstDone = true;
+      });
+    });
+
+    fetch(winningWordUrl).then((r) => {
+      r.text().then((data) => {
+        winningWord = data.toUpperCase();
+
+        if (firstDone) resolve();
+        else firstDone = true;
+      });
     });
   });
 }

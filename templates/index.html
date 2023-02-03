@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <link href="{{ url_for("static", filename="index.css") }}" rel="stylesheet">
+  <title>Wordle</title>
+</head>
+
+<body>
+<h1 class="title">Wordle</h1>
+
+<h2 id="statusText"></h2>
+
+<div class="container">
+  <div id="wordleGrid">
+    <!-- Will populate using javascript -->
+  </div>
+
+  <script type="text/javascript">
+    const validWordsUrl = "{{ url_for("static", filename="words.json") }}";
+    const winningWordUrl = "{{ url_for("word") }}";
+  </script>
+  <script src="{{ url_for("static", filename="index.js") }}"></script>
+</div>
+</body>
+
+</html>
