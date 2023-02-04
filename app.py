@@ -25,9 +25,9 @@ def generateWord() -> str:
     print("Generating new word...")
 
     global currentWord
-    currentWord = choice(words)
+    currentWord = choice(words["words"])
     while currentWord in wordsHistory["words"]:
-        currentWord = choice(words)
+        currentWord = choice(words["words"])
 
     wordsHistory["words"].insert(0, currentWord)
     wordsHistory["lastUpdated"] = datetime.now().timestamp()
