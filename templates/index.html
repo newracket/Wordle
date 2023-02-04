@@ -8,38 +8,42 @@
 </head>
 
 <body>
-<h1 class="title">Wordle</h1>
+<div class="outerDiv">
+  <div class="titleContainer">
+    <h1 class="title">Wordle</h1>
 
-<h2 id="statusText"></h2>
-
-<div class="container">
-  <div class="wordleContainer">
-    <div id="wordleGrid">
-      <!-- Will populate using javascript -->
-    </div>
+    <h2 id="statusText"></h2>
   </div>
 
-  <div class="keyboard">
-    <div class="keyboardRow">
-      {% for key in ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"] %}
-        <button class="keyboardKey"
-                onclick="handleClick(this)"
-                id="{{ key }}">{{ key }}</button>
-      {% endfor %}
+  <div class="container">
+    <div class="wordleContainer">
+      <div id="wordleGrid">
+        <!-- Will populate using javascript -->
+      </div>
     </div>
-    <div class="keyboardRow">
-      {% for key in ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Delete"] %}
-        <button class="keyboardKey"
-                onclick="handleClick(this)"
-                id="{{ key }}">{{ key }}</button>
-      {% endfor %}
-    </div>
-    <div class="keyboardRow">
-      {% for key in ["Z", "X", "C", "V", "B", "N", "M", "Enter"] %}
-        <button class="keyboardKey"
-                onclick="handleClick(this)"
-                id="{{ key }}">{{ key }}</button>
-      {% endfor %}
+
+    <div class="keyboard">
+      <div class="keyboardRow">
+        {% for key in ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"] %}
+          <button class="keyboardKey"
+                  onclick="handleClick(this)"
+                  id="{{ key }}">{{ key }}</button>
+        {% endfor %}
+      </div>
+      <div class="keyboardRow">
+        {% for key in ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Delete"] %}
+          <button class="keyboardKey"
+                  onclick="handleClick(this)"
+                  id="{{ key }}">{{ key }}</button>
+        {% endfor %}
+      </div>
+      <div class="keyboardRow">
+        {% for key in ["Z", "X", "C", "V", "B", "N", "M", "Enter"] %}
+          <button class="keyboardKey"
+                  onclick="handleClick(this)"
+                  id="{{ key }}">{{ key }}</button>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
@@ -49,7 +53,6 @@
   const winningWordUrl = "{{ url_for("word") }}";
 </script>
 <script src="{{ url_for("static", filename="index.js") }}"></script>
-</div>
 </body>
 
 </html>
