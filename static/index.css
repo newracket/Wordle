@@ -55,6 +55,18 @@ html, body {
   flex-wrap: wrap;
 }
 
+@media screen and (max-width: 400px) {
+  .wordleBox {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+  }
+
+  .keyboardKey {
+    margin: 0 !important;
+  }
+}
+
 .wordleBox {
   width: 65px;
   height: 65px;
