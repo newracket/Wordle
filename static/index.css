@@ -6,7 +6,7 @@ html, body {
 
 .outerDiv {
   height: 100%;
-  padding: 50px;
+  padding: 50px 0;
 
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@ html, body {
 
 .keyboardKey {
   height: 50px;
-  min-width: min(50px, 5vw);
+  min-width: min(50px, 7vw);
   margin: 0 2px;
   border: 1px solid rgb(200, 200, 200);
 
