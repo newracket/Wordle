@@ -79,7 +79,8 @@ async function doFetches() {
     let firstDone = false;
     fetch(validWordsUrl).then((r) => {
       r.json().then((data) => {
-        validWords = data.words.concat(data.valid);
+        validWords = data;
+        console.log(validWords);
 
         if (firstDone) resolve();
         else firstDone = true;

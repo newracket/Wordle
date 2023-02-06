@@ -50,7 +50,7 @@
 </div>
 
 <script type="text/javascript">
-  const validWordsUrl = "{{ url_for("static", filename="words.json") }}";
+  const validWordsUrl = "{{ url_for("validWords") }}";
   const winningWordUrl = "{{ url_for("word") }}";
 </script>
 <script src="{{ url_for("static", filename="index.js") }}"></script>

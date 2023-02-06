@@ -1,14 +1,73 @@
+import sqlite3
 from datetime import datetime
-from json import loads, dumps
-from random import choice
+from math import floor
 from threading import Timer
 
-from flask import Flask, render_template
+from flask import render_template, Flask
+
+
+def getCurrentWord():
+    conn = sqlite3.connect("words.db")
+    cursor = conn.cursor()
+    w = cursor.execute(
+        "SELECT word FROM wordsHistory ORDER BY time DESC LIMIT 1").fetchone()[
+        0]
+    conn.close()
+    return w
+
+
+def getWords():
+    conn = sqlite3.connect("words.db")
+    cursor = conn.cursor()
+
+    conn.commit()
+
+    cursor.execute("SELECT * FROM words")
+    return cursor.fetchall()
+
+
+def generateWord() -> str:
+    print("Generating new word...")
+
+    global currentWord
+    conn = sqlite3.connect("words.db")
+    cursor = conn.cursor()
+
+    currentWord = \
+        cursor.execute("SELECT word FROM words WHERE COMMON = 1 AND used = 0 "
+                       "ORDER BY RANDOM() LIMIT 1").fetchone()[0]
+    cursor.execute("UPDATE words SET used = 1 WHERE word = ?", (currentWord,))
+
+    cursor.execute("INSERT INTO wordsHistory VALUES (?, ?)",
+                   (currentWord, floor(datetime.now().timestamp())))
+
+    conn.commit()
+    conn.close()
+
+    return currentWord
+
+
+def startTimer():
+    Timer(60, startTimer).start()
+
+    conn = sqlite3.connect("words.db")
+    cursor = conn.cursor()
+    oldDateTimestamp = cursor.execute(
+        "SELECT * FROM wordsHistory ORDER BY time DESC LIMIT 1").fetchone()[1]
+    conn.close()
+
+    oldDatetime = datetime.fromtimestamp(oldDateTimestamp)
+    oldMonthDay = datetime.strftime(oldDatetime, "%m%d")
+    now = datetime.now()
+    newMonthDay = datetime.strftime(now, "%m%d")
+
+    if oldMonthDay != newMonthDay:
+        generateWord()
+
 
 app = Flask(__name__)
-words = loads(open("static/words.json").read())
-wordsHistory = loads(open("wordsHistory.json").read())
-currentWord = wordsHistory["words"][0]
+currentWord = getCurrentWord()
+startTimer()
 
 
 @app.route("/")
@@ -21,37 +80,12 @@ def word():
     return currentWord
 
 
-def generateWord() -> str:
-    print("Generating new word...")
+@app.route("/validWords")
+def validWords():
+    words = getWords()
 
-    global currentWord
-    currentWord = choice(words["words"])
-    while currentWord in wordsHistory["words"]:
-        currentWord = choice(words["words"])
+    return list(map(lambda e: e[0], words))
 
-    wordsHistory["words"].insert(0, currentWord)
-    wordsHistory["lastUpdated"] = datetime.now().timestamp()
-    open("wordsHistory.json", "w").write(dumps(wordsHistory))
-
-    return currentWord
-
-
-def startTimer():
-    Timer(60, startTimer).start()
-
-    oldDatetime = datetime.fromtimestamp(wordsHistory["lastUpdated"])
-    oldMonthDay = datetime.strftime(oldDatetime, "%m%d")
-
-    now = datetime.now()
-    newMonthDay = datetime.strftime(now, "%m%d")
-
-    if oldMonthDay != newMonthDay:
-        generateWord()
-
-
-startTimer()
-if len(wordsHistory["words"]) == 0:
-    generateWord()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
