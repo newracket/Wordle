@@ -3,4 +3,4 @@
 **My replica
 of [New York Times wordle](https://www.nytimes.com/games/wordle/index.html)**
 
-Click [here](http://aniketg.me:5000/) for a working sample
+Click [here](https://wordle.aniketg.me/) for a working sample
