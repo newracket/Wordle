@@ -1,8 +1,10 @@
+import os
 import sqlite3
 from datetime import datetime
 from math import floor
 from threading import Timer
 
+from dotenv import load_dotenv
 from flask import render_template, Flask
 
 
@@ -87,5 +89,13 @@ def validWords():
     return list(map(lambda e: e[0], words))
 
 
+load_dotenv()
+port = int(os.getenv("PORT", 5000))
+context = (os.getenv("CERT_PATH"), os.getenv("KEY_PATH"))
+use_ssl = os.getenv("USE_SSL", "false").lower() == "true"
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    if use_ssl:
+        app.run(host="0.0.0.0", port=port, ssl_context=context)
+    else:
+        app.run(host="0.0.0.0", port=port)
